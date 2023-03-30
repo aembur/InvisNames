@@ -1,57 +1,101 @@
 buildscript {
 	repositories {
 		mavenCentral()
-		maven { url = "https://maven.minecraftforge.net/" }
+		maven { url = 'https://files.minecraftforge.net/maven' }
+		maven { url = 'https://repo.spongepowered.org/maven' }
 	}
 	
 	dependencies {
-		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+"
+		classpath "net.minecraftforge.gradle:ForgeGradle:5.1.+"
+		classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
 	}
 }
 
 apply plugin: "java"
 apply plugin: "net.minecraftforge.gradle"
+apply plugin: 'org.spongepowered.mixin'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+version = mod_version
+group = mod_group
+archivesBaseName = mod_id
+
 compileJava {
-	sourceCompatibility = "8"
-	targetCompatibility = "8"
-}
-
-repositories {
-	maven {
-		url = "https://maven.minecraftforge.net/"
-	}
-}
-
-dependencies {
-	minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
+	sourceCompatibility = targetCompatibility = '1.8'
+	options.encoding = 'UTF-8'
+	// Disables Gradle build caching for this task
+	// If build caching is enabled this can cause the refmap to not be built and included
+	outputs.upToDateWhen { false }
 }
 
 minecraft {
-	mappings channel: "stable", version: "39-1.12"
-	
+	mappings channel: mappings_channel, version: mappings_version
+
 	runs {
-		"client" {
-			workingDirectory file("./run")
-			mods { "${project.name}" { source sourceSets.main } }
-		}
-		
-		"server" {
-			workingDirectory file("./run/server")
-			mods { "${project.name}" { source sourceSets.main } }
+		client {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+			property 'forge.logging.console.level', 'debug'
+			arg '-torg.spongepowered.asm.launch.MixinTweaker'
 		}
 	}
+}
+
+repositories {
+	maven { url = 'https://repo.spongepowered.org/maven' }
+}
+
+configurations {
+	embed
+	jarLibs
+}
+
+dependencies {
+	minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+	jarLibs('org.spongepowered:mixin:0.8.5') {
+		exclude module: 'commons-io'
+		exclude module: 'gson'
+		exclude module: 'guava'
+	}
+
+	// Hacky way to get mixin work
+	annotationProcessor('org.spongepowered:mixin:0.8.5:processor') {
+		exclude module: 'gson'
+	}
+
+	implementation configurations.jarLibs
 }
 
 processResources {
 	inputs.property "version", project.version
-	
-	filesMatching("mcmod.info") {
-		expand "version": project.version
+	inputs.property "mcversion", minecraft_version
+
+	from(sourceSets.main.resources.srcDirs) {
+		duplicatesStrategy = DuplicatesStrategy.INCLUDE
+		include 'mcmod.info'
+
+		expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': project.version,
+				'mcversion': minecraft_version, 'mod_description': mod_description
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+		exclude 'mixins.healthtags.json'
+		exclude 'pack.mcmeta'
 	}
 }
 
-//When Forge 1.12 loads mods from a directory that's been put on the classpath, it expects to find resources in the same directory.
-//Default Gradle behavior puts resources in ./build/resources/main instead of ./build/classes/main/java. Let's change that.
-sourceSets.all { it.output.resourcesDir = it.output.classesDirs.getFiles().iterator().next() }
+mixin {
+	add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
+	config mod_mixin_configs.replace('${mod_id}', mod_id)
+}
+
+jar {
+	manifest {
+		attributes "ForceLoadAsMod": "true"
+		attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+		attributes "TweakOrder": "0"
+	}
+}
+
+jar.finalizedBy('reobfJar')

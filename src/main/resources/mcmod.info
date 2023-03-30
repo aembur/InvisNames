@@ -1,16 +1,17 @@
+
 [
 	{
-		"modid": "healthtags",
-		"name": "Health Tags",
-		"description": "Shows player health next to their name.",
+		"modid": "${mod_id}",
+		"name": "${mod_name}",
+		"description": "${mod_description}",
 		"version": "${version}",
-		"mcversion": "1.12.2",
+		"mcversion": "${mcversion}",
 		"url": "",
 		"updateUrl": "",
 		"authorList": ["aembr"],
-		"credits": "",
-		"logoFile": "",
-		"screenshots": [],
-		"dependencies": []
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
 	}
 ]
