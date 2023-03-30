@@ -3,7 +3,6 @@
   "package": "com.aembr.healthtags.mixin",
   "refmap": "refmap.healthtags.json",
   "client": [
-    "MixinRenderLivingBase",
     "RenderLivingMixin"
   ]
 }

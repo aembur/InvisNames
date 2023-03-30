@@ -35,9 +35,7 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
             GlStateManager.scale(-0.025F, -0.025F, 0.025F);
             GlStateManager.disableLighting();
             RenderHelper.disableStandardItemLighting();
-            GlStateManager.depthMask(false);
             Minecraft.getMinecraft().fontRenderer.drawString(healthStr, -Minecraft.getMinecraft().fontRenderer.getStringWidth(healthStr) / 2, 0, 0xFFFFFF, false);
-            GlStateManager.depthMask(true);
             RenderHelper.enableStandardItemLighting();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
