@@ -26,7 +26,7 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             int health = (int) Math.ceil(player.getHealth());
-            String healthStr = String.valueOf(health);
+            String healthStr = (player.getName() + " " + health);
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y + entity.height + 0.8F, z);
