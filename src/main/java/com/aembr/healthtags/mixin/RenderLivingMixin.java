@@ -25,6 +25,11 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
     public void doRender(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
+
+            if(!player.isInvisible()) {
+                return;
+            }
+
             String nameStr = player.getName();
 
             GlStateManager.pushMatrix();
@@ -34,7 +39,7 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
             GlStateManager.scale(-0.025F, -0.025F, 0.025F);
             GlStateManager.disableLighting();
             RenderHelper.disableStandardItemLighting();
-            Minecraft.getMinecraft().fontRenderer.drawString(nameStr, -Minecraft.getMinecraft().fontRenderer.getStringWidth(nameStr) / 2, 0, 0xFFFFFF, true);
+            Minecraft.getMinecraft().fontRenderer.drawString(nameStr, -Minecraft.getMinecraft().fontRenderer.getStringWidth(nameStr) / 2, 0, 0xFFFFFF, false);
             RenderHelper.enableStandardItemLighting();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
