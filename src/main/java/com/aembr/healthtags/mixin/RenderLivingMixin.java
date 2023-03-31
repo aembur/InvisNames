@@ -52,7 +52,12 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
 
             // Draw background
             GlStateManager.disableTexture2D();
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableAlpha();
+            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569f);
             GlStateManager.color(0.0f, 0.0f, 0.0f, rectOpacity);
+            GlStateManager.disableDepth();
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
@@ -61,6 +66,9 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
             bufferBuilder.pos(rectWidth / 2, rectHeight / 2, 0).endVertex();
             bufferBuilder.pos(rectWidth / 2, -rectHeight / 2, 0).endVertex();
             tessellator.draw();
+            GlStateManager.enableDepth();
+            GlStateManager.disableAlpha();
+            GlStateManager.disableBlend();
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.enableTexture2D();
 
