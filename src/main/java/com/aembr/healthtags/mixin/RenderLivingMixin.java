@@ -25,17 +25,16 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
     public void doRender(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            int health = (int) Math.ceil(player.getHealth());
-            String healthStr = (player.getName() + " " + health);
+            String nameStr = player.getName();
 
             GlStateManager.pushMatrix();
-            GlStateManager.translate(x, y + entity.height + 0.8F, z);
+            GlStateManager.translate(x, y + entity.height + 0.5F, z);
             GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
             GlStateManager.scale(-0.025F, -0.025F, 0.025F);
             GlStateManager.disableLighting();
             RenderHelper.disableStandardItemLighting();
-            Minecraft.getMinecraft().fontRenderer.drawString(healthStr, -Minecraft.getMinecraft().fontRenderer.getStringWidth(healthStr) / 2, 0, 0xFFFFFF, false);
+            Minecraft.getMinecraft().fontRenderer.drawString(nameStr, -Minecraft.getMinecraft().fontRenderer.getStringWidth(nameStr) / 2, 0, 0xFFFFFF, true);
             RenderHelper.enableStandardItemLighting();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
