@@ -9,9 +9,5 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class HealthTags {
 	public static final String MOD_ID = "healthtags";
-	
-	@Mod.EventHandler
-	public void onPreInit(FMLPreInitializationEvent event) {
-		System.out.println("Hello world!");
-	}
+
 }
