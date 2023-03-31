@@ -1,7 +1,7 @@
 {
   "compatibilityLevel": "JAVA_8",
-  "package": "com.aembr.healthtags.mixin",
-  "refmap": "refmap.healthtags.json",
+  "package": "com.aembr.invisnames.mixin",
+  "refmap": "refmap.invisnames.json",
   "client": [
     "RenderLivingMixin"
   ]

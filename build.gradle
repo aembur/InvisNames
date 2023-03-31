@@ -80,7 +80,7 @@ processResources {
 
 	from(sourceSets.main.resources.srcDirs) {
 		exclude 'mcmod.info'
-		exclude 'mixins.healthtags.json'
+		exclude 'mixins.invisnames.json'
 		exclude 'pack.mcmeta'
 	}
 }

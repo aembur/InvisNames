@@ -1,7 +1,6 @@
-package com.aembr.healthtags.mixin;
+package com.aembr.invisnames.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
