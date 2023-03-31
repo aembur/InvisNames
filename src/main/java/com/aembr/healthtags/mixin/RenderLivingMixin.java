@@ -37,13 +37,13 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
             String nameStr = player.getName();
 
             // Background rectangle stuff
-            float rectOpacity = 0.2f;
+            float rectOpacity = 0.25f;
             int rectPadding = 1;
             int rectWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(nameStr) + rectPadding * 2;
-            int rectHeight = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + rectPadding * 2;
+            int rectHeight = Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT + rectPadding;
 
             GlStateManager.pushMatrix();
-            GlStateManager.translate(x, y + entity.height + 0.5F, z);
+            GlStateManager.translate(x, y + entity.height + 0.4F, z);
             GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
             GlStateManager.scale(-0.025F, -0.025F, 0.025F);
@@ -57,9 +57,11 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferBuilder = tessellator.getBuffer();
             bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+
+            // Seems like the bottom padding should be smaller, so I'm just subtracting 1 from + y values
             bufferBuilder.pos(-rectWidth / 2, -rectHeight / 2, 0).endVertex();
-            bufferBuilder.pos(-rectWidth / 2, rectHeight / 2, 0).endVertex();
-            bufferBuilder.pos(rectWidth / 2, rectHeight / 2, 0).endVertex();
+            bufferBuilder.pos(-rectWidth / 2, rectHeight / 2 - 1, 0).endVertex();
+            bufferBuilder.pos(rectWidth / 2, rectHeight / 2 - 1, 0).endVertex();
             bufferBuilder.pos(rectWidth / 2, -rectHeight / 2, 0).endVertex();
             tessellator.draw();
             GlStateManager.enableDepth();
