@@ -1,6 +1,7 @@
 package com.aembr.healthtags.mixin;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -29,6 +30,10 @@ public abstract class RenderLivingMixin<T extends EntityLivingBase> extends Rend
     public void doRender(EntityLivingBase entity, double x, double y, double z, float entityYaw, float partialTicks, CallbackInfo ci) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
+
+            if (player.getUniqueID().equals(Minecraft.getMinecraft().player.getUniqueID())) {
+                return;
+            }
 
             if(!player.isInvisible()) {
                 return;
